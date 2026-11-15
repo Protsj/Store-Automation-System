@@ -1,4 +1,5 @@
 ﻿namespace StoreAutomatization.Repositories;
+
 using StoreAutomatization.Models;
 
 public class StoreRepository

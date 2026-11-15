@@ -1,5 +1,7 @@
 ﻿namespace StoreAutomatization.Services;
 
+using StoreAutomatization.Infrastructure.Logging;
+using StoreAutomatization.Infrastructure.Security;
 using StoreAutomatization.Models;
 using StoreAutomatization.Repositories;
 using System.Threading.Channels;

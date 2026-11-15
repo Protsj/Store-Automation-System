@@ -1,4 +1,5 @@
 ﻿namespace StoreAutomatization.Data;
+
 using StoreAutomatization.Models;
 using StoreAutomatization.Repositories;
 public class MockData
