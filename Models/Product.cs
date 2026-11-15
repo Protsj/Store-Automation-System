@@ -6,6 +6,7 @@ public class Product
     public int category_id { get; set; }
     public string name { get; set; }
 	public int count { get; set; }
+    public decimal price { get; set; }
 
     public ProductInfo info { get; private set; }
 

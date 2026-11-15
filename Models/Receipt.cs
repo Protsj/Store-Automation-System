@@ -7,10 +7,9 @@ public class Receipt
     public DateTime time { get; set; }
 	public string customer_name { get; set; }
 	public string shop_name { get; set; }
+    public List<ReceiptItem> items { get; private set; } = new List<ReceiptItem>();
 
-	public List<ReceiptItem> items { get; private set; } = new List<ReceiptItem>();
-
-	public void AddItem(int productId, int count)
+	public void AddItem(int productId, int count, decimal price)
 	{
 		if (state != ReceiptState.Open)
 			throw new InvalidOperationException("Неможливо додати товар: чек вже закритий або скасований.");
@@ -19,11 +18,17 @@ public class Receipt
 		{
 			receipt_id = this.id,
 			product_id = productId,
-			count = count
-		};
+			count = count,
+			price = price
+        };
 		items.Add(newItem);
 	}
-	
+
+	public decimal GetTotal()
+	{
+		return items.Sum(item => item.price * item.count);
+	}
+
 	public void Pay()
 	{
 		if (state != ReceiptState.Open)
