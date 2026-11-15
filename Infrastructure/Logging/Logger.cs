@@ -1,4 +1,4 @@
-﻿namespace StoreAutomatization.Services;
+﻿namespace StoreAutomatization.Infrastructure.Logging;
 
 using Serilog;
 using Serilog.Formatting.Compact;

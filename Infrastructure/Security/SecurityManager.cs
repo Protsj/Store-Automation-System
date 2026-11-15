@@ -1,6 +1,7 @@
-﻿namespace StoreAutomatization.Services;
+﻿namespace StoreAutomatization.Infrastructure.Security;
 
-public enum UserRole { None, Cashier, Admin }
+using StoreAutomatization.Infrastructure.Logging;
+
 public static class SecurityManager
 {
     public static UserRole CurrentRole { get; private set; } = UserRole.None;
