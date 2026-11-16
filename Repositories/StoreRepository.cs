@@ -2,7 +2,7 @@
 
 using StoreAutomatization.Models;
 
-public class StoreRepository
+public class StoreRepository : IStoreRepository
 {
 	private List<Category> _categories = new List<Category>();
     private List<Product> _products = new List<Product>();

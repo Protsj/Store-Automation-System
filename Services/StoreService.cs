@@ -4,13 +4,12 @@ using StoreAutomatization.Infrastructure.Logging;
 using StoreAutomatization.Infrastructure.Security;
 using StoreAutomatization.Models;
 using StoreAutomatization.Repositories;
-using System.Threading.Channels;
 
-public class StoreService
+public class StoreService : IStoreService
 {
-    private readonly StoreRepository _repo;
+    private readonly IStoreRepository _repo;
 
-    public StoreService(StoreRepository repo) { _repo = repo; }
+    public StoreService(IStoreRepository repo) { _repo = repo; }
 
     public void PrintFullProductInfo()
     {
