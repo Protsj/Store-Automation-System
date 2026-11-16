@@ -1,8 +1,7 @@
 ﻿namespace StoreAutomatization.Models;
 
-public class Receipt
+public class Receipt : BaseEntity
 {
-	public int id { get; set; }
 	public ReceiptState state { get; private set; } = ReceiptState.Open;
     public DateTime time { get; set; }
 	public string customer_name { get; set; }
