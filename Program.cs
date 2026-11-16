@@ -16,9 +16,9 @@ internal class Program
         {
             Logger.LogInfo("Систему автоматизації магазину запущено.");
 
-            StoreRepository repository = new StoreRepository();
+            IStoreRepository repository = new StoreRepository();
             MockData.Initialize(repository);
-            StoreService service = new StoreService(repository);
+            IStoreService service = new StoreService(repository);
 
             StoreConsoleUI storeConsoleUI = new StoreConsoleUI(service);
             storeConsoleUI.RunDemoScenarios();

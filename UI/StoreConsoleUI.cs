@@ -5,9 +5,9 @@ using StoreAutomatization.Infrastructure.Security;
 using StoreAutomatization.Infrastructure.Logging;
 public class StoreConsoleUI
 {
-    private readonly StoreService _service;
+    private readonly IStoreService _service;
 
-    public StoreConsoleUI(StoreService service) { _service = service; }
+    public StoreConsoleUI(IStoreService service) { _service = service; }
 
     public void RunDemoScenarios()
     {

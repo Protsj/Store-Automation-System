@@ -4,7 +4,7 @@ using StoreAutomatization.Models;
 using StoreAutomatization.Repositories;
 public class MockData
 {
-    public static void Initialize(StoreRepository repository)
+    public static void Initialize(IStoreRepository repository)
     {
         // ------------------ КАТЕГОРІЇ (Categories) ------------------
         repository.AddCategory(new Category { id = 1, name = "Фрукти та ягоди" });
