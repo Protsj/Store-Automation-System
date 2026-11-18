@@ -13,6 +13,7 @@ public class Product : BaseEntity
     {
         this.info = new ProductInfo
         {
+            product_id = this.id,
             compositions = compositions,
             calories = calories,
             storage_conditions = storage_conditions

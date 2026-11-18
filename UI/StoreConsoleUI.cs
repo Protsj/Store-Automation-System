@@ -18,21 +18,28 @@ public class StoreConsoleUI
         Logger.LogInfo("Спроба входу з невірним паролем...");
         SecurityManager.Authenticate("admin", "wrong_pass");
         Console.WriteLine("");
-        Logger.LogInfo("Дії без авторизації (гість намагається додати товар та відкрити чек)...");
+        Logger.LogInfo("Дії без авторизації (гість намагається додати категорію, товар та відкрити чек)...");
+        _service.AddNewCategory("Нелегальна категорія");
         _service.AddNewProduct("Спроба злому", 1, 1, 100.00m, "-", 0, "-");
-        _service.OpenNewReceipt("Гість", "АТБ");
+        _service.OpenNewReceipt(8, 2);
 
         Console.WriteLine("\n=== РОБОТА АДМІНІСТРАТОРА ===");
         SecurityManager.Authenticate("admin", "admin123");
+        _service.AddNewCategory("Спортивне харчування");
         _service.AddNewProduct("Енергетик Monster", 30, 50, 65.00m, "Вода, таурин, кофеїн", 45, "Від 0°C до +25°C");
         Logger.LogInfo("Перевірка RBAC: Адміністратор намагається відкрити чек як касир...");
-        _service.OpenNewReceipt("Тест", "АТБ");
+        _service.OpenNewReceipt(1, 2);
         SecurityManager.Logout();
 
         Console.WriteLine("\n=== РОБОТА КАСИРА: УСПІШНИЙ ПРОДАЖ ТА ВАЛІДАЦІЇ ===");
         SecurityManager.Authenticate("cashier", "cashier123");
 
-        int activeReceiptId = _service.OpenNewReceipt("Іван", "АТБ");
+        Logger.LogInfo("Спроба відкрити чек для неіснуючого покупця або магазину...");
+        _service.OpenNewReceipt(999, 2);
+        _service.OpenNewReceipt(8, 999);
+        Console.WriteLine("");
+
+        int activeReceiptId = _service.OpenNewReceipt(8, 2);
         if (activeReceiptId != -1)
         {
             Logger.LogInfo("Спроба відсканувати неіснуючий товар та чек...");
@@ -55,7 +62,7 @@ public class StoreConsoleUI
         }
 
         Console.WriteLine("\n=== РОБОТА КАСИРА: ПОРОЖНІЙ ЧЕК ТА СКАСУВАННЯ З ПОВЕРНЕННЯМ ТОВАРІВ ===");
-        int emptyReceiptId = _service.OpenNewReceipt("Олена", "Сільpo");
+        int emptyReceiptId = _service.OpenNewReceipt(2, 1);
         Logger.LogInfo("Спроба закрити порожній чек...");
         _service.CloseReceipt(emptyReceiptId, 100.00m);
         _service.CancelReceipt(emptyReceiptId);
@@ -64,7 +71,7 @@ public class StoreConsoleUI
         _service.ScanProductToReceipt(emptyReceiptId, 1, 1);
         _service.CloseReceipt(emptyReceiptId, 100.00m);
         _service.CancelReceipt(emptyReceiptId);
-        int canceledWithItemsId = _service.OpenNewReceipt("Максим", "Новус");
+        int canceledWithItemsId = _service.OpenNewReceipt(5, 3);
         _service.ScanProductToReceipt(canceledWithItemsId, 10, 5);
         _service.PrintProductStock(10);
         Console.WriteLine("");

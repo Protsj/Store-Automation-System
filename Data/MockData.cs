@@ -6,6 +6,38 @@ public class MockData
 {
     public static void Initialize(IStoreRepository repository)
     {
+        // ------------------ ПОКУПЦІ (Customers) ------------------
+        var customer1 = new Customer { id = 1, name = "Олександр Петренко", phone = "+380501112233" };
+        var customer2 = new Customer { id = 2, name = "Ірина Ковальчук", phone = "+380672223344" };
+        var customer3 = new Customer { id = 3, name = "Дмитро Мельник", phone = "+380933334455" };
+        var customer4 = new Customer { id = 4, name = "Ольга Бойко", phone = "+380504445566" };
+        var customer5 = new Customer { id = 5, name = "Максим Шевченко", phone = "+380675556677" };
+        var customer6 = new Customer { id = 6, name = "Анна Ткаченко", phone = "+380936667788" };
+        var customer7 = new Customer { id = 7, name = "Віктор Романенко", phone = "+380507778899" };
+        var customer8 = new Customer { id = 8, name = "Іван", phone = "+380678889900" };
+
+        repository.AddCustomer(customer1);
+        repository.AddCustomer(customer2);
+        repository.AddCustomer(customer3);
+        repository.AddCustomer(customer4);
+        repository.AddCustomer(customer5);
+        repository.AddCustomer(customer6);
+        repository.AddCustomer(customer7);
+        repository.AddCustomer(customer8);
+
+        // ------------------ МАГАЗИНИ (Shops) ------------------
+        var shop1 = new Shop { id = 1, name = "Сільпо", address = "просп. Берестейський, 24" };
+        var shop2 = new Shop { id = 2, name = "АТБ", address = "вул. Хрещатик, 10" };
+        var shop3 = new Shop { id = 3, name = "Novus", address = "вул. Велика Васильківська, 55" };
+        var shop4 = new Shop { id = 4, name = "Ашан", address = "вул. Антоновича, 176" };
+        var shop5 = new Shop { id = 5, name = "МегаМаркет", address = "вул. Вадима Гетьмана, 6" };
+
+        repository.AddShop(shop1);
+        repository.AddShop(shop2);
+        repository.AddShop(shop3);
+        repository.AddShop(shop4);
+        repository.AddShop(shop5);
+
         // ------------------ КАТЕГОРІЇ (Categories) ------------------
         repository.AddCategory(new Category { id = 1, name = "Фрукти та ягоди" });
         repository.AddCategory(new Category { id = 2, name = "Овочі та зелень" });
@@ -152,14 +184,14 @@ public class MockData
         repository.AddProduct(product27);
 
         // ------------------ ЧЕКИ ТА АЙТЕМИ (Receipts and ReceiptItems) ------------------
-        var receipt1 = new Receipt { id = 1, time = DateTime.Now.AddDays(-2).AddHours(10), customer_name = "Олександр Петренко", shop_name = "Сільpo" };
+        var receipt1 = new Receipt { id = 1, time = DateTime.Now.AddDays(-2).AddHours(10), customer_id = customer1.id, shop_id = shop1.id, customer = customer1, shop = shop1 };
         receipt1.AddItem(product1.id, 2, product1.price); // Яблука (2 кг)
         receipt1.AddItem(product4.id, 1, product4.price); // Помідори Черрі (1 кг)
         receipt1.AddItem(product8.id, 1, product8.price); // Куряче філе (1 кг)
         receipt1.Pay();
         repository.AddReceipt(receipt1);
 
-        var receipt2 = new Receipt { id = 2, time = DateTime.Now.AddDays(-1).AddHours(15), customer_name = "Ірина Ковальчук", shop_name = "АТБ" };
+        var receipt2 = new Receipt { id = 2, time = DateTime.Now.AddDays(-1).AddHours(15), customer_id = customer2.id, shop_id = shop2.id, customer = customer2, shop = shop2 };
         receipt2.AddItem(product11.id, 2, product11.price); // Молоко (2 шт)
         receipt2.AddItem(product13.id, 1, product13.price); // Масло (1 шт)
         receipt2.AddItem(product17.id, 1, product17.price); // Батон (1 шт)
@@ -167,14 +199,14 @@ public class MockData
         receipt2.Pay();
         repository.AddReceipt(receipt2);
 
-        var receipt3 = new Receipt { id = 3, time = DateTime.Now.AddHours(-3), customer_name = "Дмитро Мельник", shop_name = "Novus" };
+        var receipt3 = new Receipt { id = 3, time = DateTime.Now.AddHours(-3), customer_id = customer3.id, shop_id = shop3.id, customer = customer3, shop = shop3 };
         receipt3.AddItem(product24.id, 6, product24.price); // Моршинська (6 шт)
         receipt3.AddItem(product25.id, 2, product25.price); // Coca-Cola (2 шт)
         receipt3.AddItem(product27.id, 3, product27.price); // Морозиво (3 шт)
         receipt3.Pay();
         repository.AddReceipt(receipt3);
 
-        var receipt4 = new Receipt { id = 4, time = DateTime.Now.AddDays(-5).AddHours(18), customer_name = "Ольга Бойко", shop_name = "Ашан" };
+        var receipt4 = new Receipt { id = 4, time = DateTime.Now.AddDays(-5).AddHours(18), customer_id = customer4.id, shop_id = shop4.id, customer = customer4, shop = shop4 };
         receipt4.AddItem(product15.id, 1, product15.price); // Яйця (1 уп)
         receipt4.AddItem(product19.id, 2, product19.price); // Гречка (2 кг)
         receipt4.AddItem(product20.id, 3, product20.price); // Спагетті (3 уп)
@@ -183,20 +215,20 @@ public class MockData
         receipt4.Pay();
         repository.AddReceipt(receipt4);
 
-        var receipt5 = new Receipt { id = 5, time = DateTime.Now.AddDays(-1).AddHours(9), customer_name = "Максим Шевченко", shop_name = "Сільpo" };
+        var receipt5 = new Receipt { id = 5, time = DateTime.Now.AddDays(-1).AddHours(9), customer_id = customer5.id, shop_id = shop1.id, customer = customer5, shop = shop1 };
         receipt5.AddItem(product22.id, 1, product22.price); // Кава Lavazza (1 уп)
         receipt5.AddItem(product18.id, 1, product18.price); // Торт Празький (1 шт)
         receipt5.AddItem(product23.id, 1, product23.price); // Чай Lipton (1 уп)
         receipt5.Pay();
         repository.AddReceipt(receipt5);
 
-        var receipt6 = new Receipt { id = 6, time = DateTime.Now.AddHours(-1), customer_name = "Анна Ткаченко", shop_name = "МегаМаркет" };
+        var receipt6 = new Receipt { id = 6, time = DateTime.Now.AddHours(-1), customer_id = customer6.id, shop_id = shop5.id, customer = customer6, shop = shop5 };
         receipt6.AddItem(product26.id, 2, product26.price); // Пельмені (2 уп)
         receipt6.AddItem(product12.id, 1, product12.price); // Кефір (1 шт)
         receipt6.Pay();
         repository.AddReceipt(receipt6);
 
-        var receipt7 = new Receipt { id = 7, time = DateTime.Now.AddDays(-10), customer_name = "Віктор Романенко", shop_name = "АТБ" };
+        var receipt7 = new Receipt { id = 7, time = DateTime.Now.AddDays(-10), customer_id = customer7.id, shop_id = shop2.id, customer = customer7, shop = shop2 };
         receipt7.AddItem(product10.id, 2, product10.price); // Стейк лосося (2 шт)
         receipt7.AddItem(product3.id, 1, product3.price);  // Лохина (1 уп)
         receipt7.AddItem(product5.id, 1, product5.price);  // Огірки (1 шт)

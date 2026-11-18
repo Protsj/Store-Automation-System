@@ -32,8 +32,11 @@ public class StoreService : IStoreService
         foreach (var receipt in receipts)
         {
             string statusStr = receipt.state == ReceiptState.Open ? "Відкритий" : receipt.state == ReceiptState.Paid ? "Оплачений" : "Скасований";
+            string shopName = receipt.shop?.name ?? _repo.GetShopById(receipt.shop_id)?.name ?? "Невідомий магазин";
+            string customerName = receipt.customer?.name ?? _repo.GetCustomerById(receipt.customer_id)?.name ?? "Невідомий покупець";
+
             Logger.LogInfo("Чек #{ReceiptId} | Магазин: {ShopName} | Покупець: {CustomerName}", 
-                receipt.id, receipt.shop_name, receipt.customer_name);
+                receipt.id, shopName, customerName);
             Logger.LogInfo("Час: {ReceiptTime} | Статус: {Status} | Загальна сума: {Total} грн", 
                 receipt.time, statusStr, receipt.GetTotal());
             Logger.LogInfo("Позиції в чеку:");
@@ -100,11 +103,25 @@ public class StoreService : IStoreService
         }
     }
 
-    public int OpenNewReceipt(string customerName, string shopName)
+    public int OpenNewReceipt(int customerId, int shopId)
     {
         if (SecurityManager.CurrentRole != UserRole.Cashier)
         {
             Logger.LogError("Відмовлено в доступі: створювати чеки може лише Касир.");
+            return -1;
+        }
+
+        var customer = _repo.GetCustomerById(customerId);
+        if (customer == null)
+        {
+            Logger.LogError("Помилка: покупця з ID {CustomerId} не знайдено.", customerId);
+            return -1;
+        }
+
+        var shop = _repo.GetShopById(shopId);
+        if (shop == null)
+        {
+            Logger.LogError("Помилка: магазин з ID {ShopId} не знайдено.", shopId);
             return -1;
         }
 
@@ -114,12 +131,15 @@ public class StoreService : IStoreService
         {
             id = newId,
             time = DateTime.Now,
-            customer_name = customerName,
-            shop_name = shopName
+            customer_id = customerId,
+            shop_id = shopId,
+            customer = customer,
+            shop = shop
         };
 
         _repo.AddReceipt(receipt);
-        Logger.LogInfo("Відкрито новий чек #{ReceiptId} для покупця {CustomerName}.", newId, customerName);
+        Logger.LogInfo("Відкрито новий чек #{ReceiptId} | Магазин: {ShopName} | Покупець: {CustomerName}.",
+            newId, shop.name, customer.name);
 
         return newId;
     }
@@ -197,11 +217,44 @@ public class StoreService : IStoreService
         }
     }
 
+    public void AddNewCategory(string name)
+    {
+        if (SecurityManager.CurrentRole != UserRole.Admin)
+        {
+            Logger.LogError("Відмовлено в доступі: додавати нові категорії може лише Адміністратор.");
+            return;
+        }
+
+        if (_repo.GetAllCategories().Any(c => c.name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+        {
+            Logger.LogError("Помилка: категорія з назвою '{CategoryName}' вже існує.", name);
+            return;
+        }
+
+        int newId = _repo.GetAllCategories().Count > 0 ? _repo.GetAllCategories().Max(c => c.id) + 1 : 1;
+
+        var category = new Category
+        {
+            id = newId,
+            name = name
+        };
+
+        _repo.AddCategory(category);
+        Logger.LogInfo("Адміністратор додав нову категорію: '{CategoryName}' (ID: {CategoryId}).", name, newId);
+    }
+
     public void AddNewProduct(string name, int categoryId, int count, decimal price, string compositions, int calories, string storageConditions)
     {
         if(SecurityManager.CurrentRole != UserRole.Admin)
         {
             Logger.LogError("Відмовлено в доступі: Додавати нові товари може лише Адміністратор.");
+            return;
+        }
+
+        var category = _repo.GetCategoryById(categoryId);
+        if (category == null)
+        {
+            Logger.LogError("Помилка: категорію з ID {CategoryId} не знайдено. Товар не додано.", categoryId);
             return;
         }
 

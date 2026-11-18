@@ -17,4 +17,14 @@ public interface IStoreRepository
     Receipt? GetReceiptById(int id);
     void AddReceipt(Receipt receipt);
     void UpdateReceipt(Receipt receipt);
+
+    List<Customer> GetAllCustomers();
+    Customer? GetCustomerById(int id);
+    void AddCustomer(Customer customer);
+    void UpdateCustomer(Customer customer);
+
+    List<Shop> GetAllShops();
+    Shop? GetShopById(int id);
+    void AddShop(Shop shop);
+    void UpdateShop(Shop shop);
 }

@@ -2,7 +2,7 @@
 
 public enum ReceiptState
 {
-    Open,
-    Paid,
-    Canceled
+    Open = 1,
+    Paid = 2,
+    Canceled = 3
 }

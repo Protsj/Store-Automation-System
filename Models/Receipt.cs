@@ -2,24 +2,27 @@
 
 public class Receipt : BaseEntity
 {
-	public ReceiptState state { get; private set; } = ReceiptState.Open;
+	public int customer_id { get; set; }
+	public int shop_id { get; set; }
+    public ReceiptState state { get; private set; } = ReceiptState.Open;
     public DateTime time { get; set; }
-	public string customer_name { get; set; }
-	public string shop_name { get; set; }
-    public List<ReceiptItem> items { get; private set; } = new List<ReceiptItem>();
+    public List<ReceiptItem> items { get; set; } = new List<ReceiptItem>();
+	public Customer? customer { get; set; }
+	public Shop? shop { get; set; }
 
-	public void AddItem(int productId, int count, decimal price)
+    public void AddItem(int productId, int count, decimal price)
 	{
 		if (state != ReceiptState.Open)
 			throw new InvalidOperationException("Неможливо додати товар: чек вже закритий або скасований.");
 
 		var newItem = new ReceiptItem
 		{
+			id = items.Count + 1,
 			receipt_id = this.id,
 			product_id = productId,
 			count = count,
 			price = price
-        };
+		};
 		items.Add(newItem);
 	}
 
